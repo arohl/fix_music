@@ -21,13 +21,14 @@ EOS
 end
 
 puts ""
-puts "| Track | Filename | Title | Artist | Album | Year | Genre | Comment |"
-puts "| ----- | -------- |------ | ------ | ----- | ---- | ----- | ------- |"
+puts "| Track | Filename | Title | Artist | Album | Year | Genre | Sample Rate |"
+puts "| ----- | -------- |------ | ------ | ----- | ---- | ----- | ----------- |"
 
 ARGV.each do |filename|
   TagLib::FileRef.open(filename) do |fileref|
     unless fileref.null?
       tag = fileref.tag
+      prop = fileref.audio_properties
 
       if opts[:strip_leading_brackets]
         count = 0
@@ -74,7 +75,7 @@ ARGV.each do |filename|
 
       fileref.save
 
-      puts "| " + tag.track.to_s + " | " + filename + " | " + tag.title + " | " + tag.artist + " | " + tag.album + " | " + tag.year.to_s + " | " + tag.genre + " | " + tag.comment + " |"
+      puts "| " + tag.track.to_s + " | " + filename + " | " + tag.title + " | " + tag.artist + " | " + tag.album + " | " + tag.year.to_s + " | " + tag.genre + " | " + prop.sample_rate.to_s + " |"
 
     end
   end
