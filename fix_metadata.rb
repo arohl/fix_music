@@ -17,12 +17,13 @@ EOS
   opt :artist, "Set the artist", :type => :string, :short => 'a'
   opt :title, "Set the title", :type => :string, :short => 't'
   opt :genre, "Set the genre", :type => :string, :short => 'g'
+  opt :comment, "Set the comment", :type => :string, :short => 'c'
   opt :year, "Set the year", :type => :int, :short => 'y'
 end
 
 puts ""
-puts "| Track | Filename | Title | Artist | Album | Year | Genre | Sample Rate |"
-puts "| ----- | -------- |------ | ------ | ----- | ---- | ----- | ----------- |"
+puts "| Track | Filename | Title | Artist | Album | Year | Genre | Sample Rate | Comment |"
+puts "| ----- | -------- |------ | ------ | ----- | ---- | ----- | ----------- | ------- |"
 
 ARGV.each do |filename|
   TagLib::FileRef.open(filename) do |fileref|
@@ -69,13 +70,17 @@ ARGV.each do |filename|
         tag.genre = opts[:genre]
       end
 
+      if opts[:comment]
+        tag.comment = opts[:comment]
+      end
+
       if opts[:year_given]
         tag.year = opts[:year]
       end
 
       fileref.save
 
-      puts "| " + tag.track.to_s + " | " + filename + " | " + tag.title + " | " + tag.artist + " | " + tag.album + " | " + tag.year.to_s + " | " + tag.genre + " | " + prop.sample_rate.to_s + " |"
+      puts "| " + tag.track.to_s + " | " + filename + " | " + tag.title + " | " + tag.artist + " | " + tag.album + " | " + tag.year.to_s + " | " + tag.genre + " | " + prop.sample_rate.to_s + " |" + tag.comment + " | "
 
     end
   end
