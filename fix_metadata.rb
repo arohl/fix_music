@@ -1,9 +1,9 @@
-#! /opt/local/bin/ruby
+#! /usr/bin/ruby
 
 require 'taglib'
-require 'trollop'
+require 'optimist'
 
-opts = Trollop::options do
+opts = Optimist::options do
   version "fix_metadata 1.0.0 (c) 2017 Andrew Rohl"
 banner <<-EOS
 fix_music_metadata is a program for easily changing the metadata of your music.
@@ -15,6 +15,7 @@ EOS
 
   opt :strip_leading_brackets, "Removes brackets from song title if first character", :short => 's'
   opt :artist, "Set the artist", :type => :string, :short => 'a'
+  opt :album, "Set the album", :type => :string
   opt :title, "Set the title", :type => :string, :short => 't'
   opt :genre, "Set the genre", :type => :string, :short => 'g'
   opt :comment, "Set the comment", :type => :string, :short => 'c'
@@ -60,6 +61,10 @@ ARGV.each do |filename|
 
       if opts[:artist_given]
         tag.artist = opts[:artist]
+      end
+
+      if opts[:album_given]
+        tag.album = opts[:album]
       end
 
       if opts[:title_given]
